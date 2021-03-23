@@ -8,7 +8,7 @@ with open("config.yml", "r") as ymlfile:
 geocoder = what3words.Geocoder(str(cfg['what3words']['api_key']))
 
 # Three words to coordinates test
-res = geocoder.convert_to_coordinates('prom.cape.pump')
+res = geocoder.convert_to_coordinates('volume.amendment.nanny')
 
 print(res['coordinates']['lat'])
 print(res['coordinates']['lng'])

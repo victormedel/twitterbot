@@ -133,3 +133,4 @@ config.yml
 *.png
 /.vscode
 *.json
+/_archive

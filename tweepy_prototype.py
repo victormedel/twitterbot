@@ -4,7 +4,9 @@ import os
 import json
 import sys
 import geocoder
+import random
 from word_parser import word_parser
+from word_check import word_check
 
 with open("config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
@@ -47,7 +49,12 @@ def get_trending(loc):
     # List cleanup
     trending_words = [i for i in trending_words if len(i) > 1]
     trending_words = [x.lower() for x in trending_words]
+    trending_words = word_check(trending_words)
     print(trending_words)
+    print(' ')
+    three_words = random.sample(trending_words, 3)
+    print(three_words)
+
 
 
 

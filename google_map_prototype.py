@@ -10,8 +10,8 @@ url = "https://maps.googleapis.com/maps/api/staticmap?"
   
 # center defines the center of the map, 
 # equidistant from all edges of the map.  
-center = "51.484463,-0.195405"
-  
+center = "-9.097335,-56.44464"
+
 # zoom defines the zoom 
 # level of the map 
 zoom = 15
