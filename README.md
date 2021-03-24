@@ -13,9 +13,9 @@ Additional line of information text about what the project does. Your introducti
 
 Before you begin, ensure you have met the following requirements:
 <!--- These are just example requirements. Add, duplicate or remove as required --->
-* Obtained Twitter Developer API keys and tokens
-* Obtained what3words API key
-* Obatined Google Cloud API key for Google Map Static API
+* Obtained [Twitter Developer](https://developer.twitter.com/) API keys and tokens
+* Obtained a [what3words](https://developer.what3words.com/) API key
+* Obatined a [Google Cloud](https://cloud.google.com/apis) API key for Google Map Static API
 * Generate config.yml file
 
 
