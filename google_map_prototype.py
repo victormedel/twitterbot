@@ -15,10 +15,11 @@ center = "-9.097335,-56.44464"
 # zoom defines the zoom 
 # level of the map 
 zoom = 15
+maptype = "satellite" # roadmap, satellite, hybrid, terrain
   
 # get method of requests module 
 # return response object 
-r = requests.get(url + "center=" + center + "&zoom=" + str(zoom) + "&size=800x400" + "&maptype=roadmap" +
+r = requests.get(url + "center=" + center + "&zoom=" + str(zoom) + "&size=800x400" + "&maptype=" + maptype +
                 "&key=" + cfg['google_static_map']['api_key']) 
 
   
