@@ -6,12 +6,19 @@ import yaml
 import random
 import tweepy
 import geocoder
+import requests
 import what3words
 from word_parser import word_parser
 from word_check import word_check
 
 # Load Configuration File
-with open("config.yml", "r") as ymlfile:
+if os.path.exists('test_config.yml'):
+    config_file = 'test_config.yml'
+
+else:
+    config_file = 'config.yml'
+
+with open(config_file, "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 # Authenticate to Twitter
@@ -24,7 +31,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 def get_trending(loc):
     
-    t_words = [] # Empty List to Hold Words
+    trending_words = [] # Empty List to Hold Words
 
     # Trends for Specific Country
     g = geocoder.osm(loc) # Object with Location's Latitude and Longitude
@@ -36,15 +43,17 @@ def get_trending(loc):
         for trend in value['trends']:
             value = word_parser(trend['name'])
             if type(value) == list:
-                t_words.extend(value)
+                trending_words.extend(value)
             else:
-                t_words.append(value)
+                trending_words.append(value)
     
     # Word List Cleanup
-    t_words = [i for i in t_words if len(i) > 1] # remove single characters entries
-    t_words = [x.lower() for x in t_words] # lowercase all list
-    t_words = word_check(t_words) # remove any words in list not in english dictionary
-    three_words = random.sample(t_words, 3) # randomly select three words
+    trending_words = [i for i in trending_words if len(i) > 2] # remove single characters entries
+    trending_words = [x.lower() for x in trending_words] # lowercase all list
+    
+    trending_words = word_check(trending_words) # remove any words in list not in english dictionary
+
+    three_words = random.sample(trending_words, 3) # randomly select three words
     three_word_str = '.'.join(three_words) # join list items
 
     return three_word_str
@@ -55,27 +64,51 @@ def get_lat_long(words):
     geocoder = what3words.Geocoder(str(cfg['what3words']['api_key']))
 
     # Three words to coordinates test
-    result = geocoder.convert_to_coordinates(words)
+    result = geocoder.autosuggest(words)
 
-    return str(result['coordinates']['lat']), str(result['coordinates']['lng'])
+    country = result['suggestions'][0]['country']
+    nearest = result['suggestions'][0]['nearestPlace']
+    suggested_words = result['suggestions'][0]['words']
+
+    return country, nearest, suggested_words
 
 
-def get_map_url(latitude, longitude):
+def get_map_url(center):
     # get image map of coordinates - should be a function
-    center = latitude + ',' + longitude
     zoom = 15
     size = "800x400"
-    maptype = "roadmap" # roadmap, satellite, hybrid, terrain
+    maptype = "hybrid" # roadmap, satellite, hybrid, terrain
     url = "https://maps.googleapis.com/maps/api/staticmap?" + "center=" + center + "&zoom=" + \
         str(zoom) + "&size=" + size + "&maptype=" + maptype + "&key=" + cfg['google_static_map']['api_key']
     
+    r = requests.get(url) 
+
+    # wb mode is stand for write binary mode 
+    f = open('map_results.png', 'wb') 
+    
+    # r.content gives content, 
+    # in this case gives image 
+    f.write(r.content) 
+    
+    # close method of file object 
+    # save and close the file 
+    f.close() 
+
     return url
 
 
 if __name__ == "__main__":
     word_str = get_trending("United States")
-    print(word_str)
-    latitude, longitude = get_lat_long(word_str)
-    print(latitude, ',', longitude)
+    country, location, suggested_words = get_lat_long(word_str)
+    get_map_url(str(location + ',' + country))
+
+    print(country)
+    print(location)
+    print(' ')
+    print('Twitter Trending Words: ', word_str)
+    print('What3Words Suggestion:', suggested_words)
+    
+
+
     
     

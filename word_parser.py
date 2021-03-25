@@ -18,16 +18,35 @@ def upper_check(value):
         return value
 
 
+def double_check(words):
+    for word in words:
+        if '.' in word:
+            new_word = word.replace('.', '')
+            words.remove(word)
+            words.append(new_word)
+        
+        if word[0].isdigit():
+            words.remove(word)
+        
+        if '&' in word:
+            words.remove(word)
+
+    return words
+
+
 def word_parser(value):
     if ' ' in value:
-        return value.split(' ')
+        value = value.split(' ') # splits words on space into list
+        new_value = double_check(value)
+        return new_value
 
     if '#' in value:
         if any(x.isupper() for x in value):
-            value = upper_check(value[1:])
-            return value
+            value = upper_check(value[1:]) # removes hashtag and checks for multiple uppercase
+            new_value = double_check(value)
+            return new_value
         else:    
-            return value
+            return value[1:]
 
     else:
         return value
