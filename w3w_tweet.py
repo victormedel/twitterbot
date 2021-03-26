@@ -109,7 +109,7 @@ def twitter_post(sugg_words, nearest_loc , country, latitude, longitude):
     tweet = 'Interesting! @what3words is using the random words ///' + sugg_words + \
             ' to identify a three meter square area on earth near: ' + '\n' + \
             emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
-            '#what3words #AnyoneLiveHere'
+            '#what3words #Random #Location'
     
     place_id = nearest_loc + ',' + country
     api.update_status(status=tweet, media_ids=[media.media_id], lat=latitude, long=longitude, place_id=place_id)

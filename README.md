@@ -1,13 +1,13 @@
-# TwitterBot
+# Random Location TwitterBot
 
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
 ![GitHub repo size](https://img.shields.io/github/repo-size/victormedel/twitterbot)
 ![GitHub contributors](https://img.shields.io/github/contributors/victormedel/twitterbot)
 ![GitHub stars](https://img.shields.io/github/stars/victormedel/twitterbot?style=social)
 
-TwitterBot is a bot that allows Twitter users to tweet a geo location based on three random words obtained from the top trending topics on Twitter.
+The Random Location TwitterBot parses all Twitter trending words and attempts to generate a geo location via [what3words.com](https://what3words.com) twice a day.
 
-Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it.
+This is a simple converation starter application that will allow Twitter users to reach a different audience
 
 ## Prerequisites
 
@@ -18,29 +18,18 @@ Before you begin, ensure you have met the following requirements:
 * Obatined a [Google Cloud](https://cloud.google.com/apis) API key for Google Map Static API
 * Generate config.yml file
 
+## Installing Random Location TwitterBot
 
-## Installing <project_name>
+To install the Random Location TwitterBot, follow these steps:
 
-To install <project_name>, follow these steps:
 
-Linux and macOS:
-```
-<install_command>
-```
+## Using Random Location TwitterBot
 
-Windows:
-```
-<install_command>
-```
-## Using <project_name>
-
-To use <project_name>, follow these steps:
+To use Random Location TwitterBot, follow these steps:
 
 ```
-<usage_example>
+C:\>python main.py
 ```
-
-Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
 
 ## Built With
 
