@@ -65,16 +65,22 @@ def get_loc(words):
     # Create What3Words API object
     geocoder = what3words.Geocoder(str(cfg['what3words']['api_key']))
 
-    # Three words to coordinates test
+    # Get nearest location based on what3words word suggestion
     result = geocoder.autosuggest(words)
 
+    # Get values from item in set ranked #1
     country_abv = result['suggestions'][0]['country']
     nearest_loc = result['suggestions'][0]['nearestPlace']
     sugg_words = result['suggestions'][0]['words']
 
+    # Get latitude and longitude for suggested words
+    coord = geocoder.convert_to_coordinates(sugg_words)
+    latitude = str(coord['coordinates']['lat'])
+    longitude = str(coord['coordinates']['lng'])
+
     country = pycountry.countries.get(alpha_2=country_abv)
 
-    return sugg_words, nearest_loc , country.name
+    return sugg_words, nearest_loc , country.name, latitude, longitude
 
 
 def map_generator(center):
@@ -94,16 +100,16 @@ def map_generator(center):
     f.close() 
 
 
-def twitter_post(sugg_words, nearest_loc , country):
+def twitter_post(sugg_words, nearest_loc , country, latitude, longitude):
         
     # Upload Image
     media = api.media_upload('map_img.png')
 
     # Post tweet with image
-    tweet = 'Interesting! @what3words is using the random words <' + sugg_words + '>' + \
-            ' to identify a three meter area on earth near: ' + '\n' + \
+    tweet = 'Interesting! @what3words is using the random words ///' + sugg_words + \
+            ' to identify a three meter square area on earth near: ' + '\n' + \
             emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
             '#what3words #AnyoneLiveHere'
     
     place_id = nearest_loc + ',' + country
-    api.update_status(status=tweet, media_ids=[media.media_id], place_id=place_id)
+    api.update_status(status=tweet, media_ids=[media.media_id], lat=latitude, long=longitude, place_id=place_id)
