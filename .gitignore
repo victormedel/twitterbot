@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 # Project specific
-test_config.yml
 *.png
 /.vscode
 *.json

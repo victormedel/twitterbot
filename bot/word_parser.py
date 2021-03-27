@@ -1,6 +1,6 @@
+# twitterbot/bot/word_parser.py
 import os
 import re
-
 
 def upper_check(value):
     # Counts the number of uppercase letters
