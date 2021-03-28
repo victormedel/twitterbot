@@ -1,4 +1,5 @@
-# twitterbot/bot/word_check.py
+#!/usr/bin/env python
+# twitter-bot/bot/word_check.py
 import enchant
 
 def word_check(trending_words):

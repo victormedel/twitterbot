@@ -1,4 +1,5 @@
-# twitterbot/bot/word_parser.py
+#!/usr/bin/env python
+# twitter-bot/bot/word_parser.py
 import os
 import re
 

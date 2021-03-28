@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-# twitterbot/bot/w3w_tweet.py
+# twitter-bot/bot/w3w_tweet.py
 import os
-import json
 import sys
 import time
-import yaml
 import emoji
 import random
 import tweepy
@@ -15,9 +13,11 @@ import pycountry
 import threading
 import what3words
 from datetime import datetime
+
 from word_parser import word_parser
 from word_check import word_check
 from config import create_twitter_api, create_google_api, create_w3w_api
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -77,40 +77,52 @@ def get_loc(w_api, words):
     return sugg_words, nearest_loc , country.name, latitude, longitude
 
 
-def map_generator(g_api, center):
+def map_generator(g_api, latitude, longitude):
     # get image map of coordinates - should be a function
-    zoom = 18
+    center = latitude + ',' + longitude
+    zoom = 16
     size = "800x400"
     maptype = "hybrid" # roadmap, satellite, hybrid, terrain
     url = "https://maps.googleapis.com/maps/api/staticmap?" + "center=" + center + "&zoom=" + \
         str(zoom) + "&size=" + size + "&maptype=" + maptype + "&key=" + g_api
     
-    # get image from url
-    req = requests.get(url) 
+    req = requests.get(url)
 
-    # save image to file
-    f = open('map_img.png', 'wb') 
+    # Store image file to be used for post
+    file_name = '..\map_img.png'
+    f = open(file_name, 'wb') 
     f.write(req.content) 
-    f.close() 
+    f.close()
 
-
-def twitter_post(t_api, sugg_words, nearest_loc , country, latitude, longitude):
-        
-    # Upload Image
-    media = t_api.media_upload('map_img.png')
-
-    # Post tweet with image
-    tweet = 'Interesting! @what3words is using the random words ///' + sugg_words + \
-            ' to identify a three meter square area on earth near: ' + '\n' + \
-            emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
-            '#what3words #Random #Location #AnythingInteresting?'
+    file_stats = os.stat(file_name)
+    file_size = file_stats.st_size/1024
     
-    place_id = nearest_loc + ',' + country
-    t_api.update_status(status=tweet, media_ids=[media.media_id], lat=latitude, long=longitude, place_id=place_id)
+    print('File Size: ', file_size)
+
+    return file_name
+
+
+def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country, latitude, longitude):
+    
+    # Post Text
+    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US today are:\n' + \
+               trd_words + '\n\n' + \
+               emoji.emojize(':gear:') + ' Slightly modifying these words to:\n' + \
+               sugg_words + '\n\n' + \
+              '@what3words has identified a 3m square area on earth near: ' + '\n' + \
+               emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
+              'What are your 3 words? \n\n' + \
+               emoji.emojize(':world_map:') + '  #what3words'
+
+    # Upload Image
+    # media = t_api.media_upload(file_name)
+
+    # Post Tweet
+    # t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
 
 
 
-def main():
+def main(loc):
 
     t_api = create_twitter_api()
     g_api = create_google_api()
@@ -120,15 +132,10 @@ def main():
     # while not ticker.wait(WAIT_SECONDS):
 
     # Post to Twitter
-    trd_words = get_trending(t_api, "United States")
+    trd_words = get_trending(t_api, loc)
     sugg_words, nearest_loc, country, latitude, longitude = get_loc(w_api, trd_words)
-    center = latitude + ',' + longitude
-    map_generator(g_api, center)
-    # twitter_post(t_api, sugg_words, nearest_loc , country, latitude, longitude)
-
-    print(sugg_words)
-    print(nearest_loc, '(', country, ')')
-    print(center)
+    file_name = map_generator(g_api, latitude, longitude)
+    twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country, latitude, longitude)
 
     # Establish current date and time
     now = datetime.now()
@@ -137,4 +144,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    my_location = "United States"
+    main(my_location)
