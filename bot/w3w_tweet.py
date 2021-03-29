@@ -149,6 +149,9 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
 
     except tweepy.TweepError as e:
         print(e)
+    
+    logger.info('Clean Up: Removing generated image')
+    os.remove(file_name)
 
 
 def main():
@@ -169,7 +172,6 @@ def main():
     now = datetime.now()
     dt_str = now.strftime("%m/%d/%Y %H:%M:%S")
     logger.info('Tweet posted on: ' + str(dt_str))
-    logger.info('Done.')
 
 
 if __name__ == "__main__":
