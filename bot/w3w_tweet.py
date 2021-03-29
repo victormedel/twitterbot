@@ -106,7 +106,7 @@ def map_generator(g_api, latitude, longitude):
 
     # Store image file to be used for post
     logger.info('Storing map image to used for Twitter post')
-    file_name = '..\map_img.png'
+    file_name = 'map_img.png'
     f = open(file_name, 'wb') 
     f.write(req.content) 
     f.close()
