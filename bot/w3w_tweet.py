@@ -132,7 +132,7 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     
     # Post Text
     logger.info('Generating text for post')
-    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are:\n' + \
+    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are: ' + \
                 trd_words + '\n\n' + \
                 emoji.emojize(':gear:') +' Changing them to ///' + sugg_words + ' @what3words will point to a location near ' + \
                 emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
