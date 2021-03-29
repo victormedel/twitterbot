@@ -13,16 +13,15 @@ import pycountry
 import threading
 import what3words
 from datetime import datetime
-
 from word_parser import word_parser
 from word_check import word_check
 from config import create_twitter_api, create_google_api, create_w3w_api
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 WAIT_SECONDS = 60 # 7200
+LOCATION = "United States"
 
 
 def get_trending(t_api, loc):
@@ -83,7 +82,14 @@ def get_loc(w_api, words):
     country = pycountry.countries.get(alpha_2=country_abv)
 
     logger.info('Returning location data')
-    return sugg_words, nearest_loc , country.name, latitude, longitude
+
+    if nearest_loc == '':
+        logger.info('Nearest location blank, restarting process')
+        time.sleep(120) # sleep for 2 minutes before attempting again
+        main()
+
+    else:
+        return sugg_words, nearest_loc , country.name, latitude, longitude
 
 
 def map_generator(g_api, latitude, longitude):
@@ -111,7 +117,14 @@ def map_generator(g_api, latitude, longitude):
     logger.info('File size: ' + str(file_size))
 
     logger.info('Returning file name for map')
-    return file_name
+
+    if file_size < 100:
+        logger.info('Potential low quality map image, restarting process')
+        time.sleep(120) # sleep for 2 minutes before attempting again
+        main()
+
+    else:
+        return file_name
 
 
 def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country, latitude, longitude):
@@ -128,8 +141,6 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
               emoji.emojize(':house:') + ' What is your 3 word address? \n\n' + \
                emoji.emojize(':world_map:') + ' #what3words'
 
-    print(status)
-
     logger.info('Post to Twitter')
     # Upload Image
     # media = t_api.media_upload(file_name)
@@ -138,7 +149,7 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     # t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
 
 
-def main(loc):
+def main():
 
     logger.info('Generating API keys')
     t_api = create_twitter_api()
@@ -150,7 +161,7 @@ def main(loc):
 
     # Post to Twitter
     logger.info('Execution begins here')
-    trd_words = get_trending(t_api, loc)
+    trd_words = get_trending(t_api, LOCATION)
     sugg_words, nearest_loc, country, latitude, longitude = get_loc(w_api, trd_words)
     file_name = map_generator(g_api, latitude, longitude)
     twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country, latitude, longitude)
@@ -163,5 +174,9 @@ def main(loc):
 
 
 if __name__ == "__main__":
-    my_location = "United States"
-    main(my_location)
+    
+    try:
+        main()
+
+    except Exception:
+        print('Something broke, please restart application')
