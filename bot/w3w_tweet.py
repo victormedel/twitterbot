@@ -132,21 +132,23 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     
     # Post Text
     logger.info('Generating text for post')
-    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US today are:\n' + \
-               trd_words + '\n\n' + \
-               emoji.emojize(':gear:') + ' Modifying these words to:\n' + \
-               sugg_words + '\n\n' + \
-              '@what3words has identified a 3m square area on earth near: ' + '\n' + \
-               emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
-               emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
-               '#what3words'
+    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are:\n' + \
+                trd_words + '\n\n' + \
+                emoji.emojize(':gear:') +' Changing them to ///' + sugg_words + ' @what3words will point to a location near ' + \
+                emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
+                emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
+                '#what3words'
 
     logger.info('Post to Twitter')
-    # Upload Image
-    media = t_api.media_upload(file_name)
+    try:
+        # Upload Image
+        media = t_api.media_upload(file_name)
 
-    # Post Tweet
-    t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
+        # Post Tweet
+        t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
+
+    except tweepy.TweepError as e:
+        print(e)
 
 
 def main():
