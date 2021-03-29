@@ -20,7 +20,7 @@ from config import create_twitter_api, create_google_api, create_w3w_api
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-WAIT_SECONDS = 60 # 7200
+WAIT_SECONDS = 3600
 LOCATION = "United States"
 
 
@@ -143,10 +143,10 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
 
     logger.info('Post to Twitter')
     # Upload Image
-    # media = t_api.media_upload(file_name)
+    media = t_api.media_upload(file_name)
 
     # Post Tweet
-    # t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
+    t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
 
 
 def main():
@@ -155,9 +155,6 @@ def main():
     t_api = create_twitter_api()
     g_api = create_google_api()
     w_api = create_w3w_api()
-
-    # ticker = threading.Event()
-    # while not ticker.wait(WAIT_SECONDS):
 
     # Post to Twitter
     logger.info('Execution begins here')
@@ -174,9 +171,12 @@ def main():
 
 
 if __name__ == "__main__":
-    
-    try:
-        main()
+    while True:
 
-    except Exception:
-        print('Something broke, please restart application')
+        try:
+            main()
+
+        except Exception:
+            print('Something broke, please restart application')
+        
+        time.sleep(WAIT_SECONDS)
