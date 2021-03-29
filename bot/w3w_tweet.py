@@ -138,8 +138,8 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
                sugg_words + '\n\n' + \
               '@what3words has identified a 3m square area on earth near: ' + '\n' + \
                emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
-              emoji.emojize(':house:') + ' What is your 3 word address? \n\n' + \
-               emoji.emojize(':world_map:') + ' #what3words'
+               emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
+               '#what3words'
 
     logger.info('Post to Twitter')
     # Upload Image
@@ -177,6 +177,6 @@ if __name__ == "__main__":
             main()
 
         except Exception:
-            print('Something broke, please restart application')
+            sys.exit('Something broke, restart application')
         
         time.sleep(WAIT_SECONDS)
