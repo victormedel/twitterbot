@@ -20,7 +20,7 @@ from config import create_twitter_api, create_google_api, create_w3w_api
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-WAIT_SECONDS = 3600
+WAIT_SECONDS = 1800
 LOCATION = "United States"
 
 
@@ -178,8 +178,10 @@ if __name__ == "__main__":
     while True:
         try:
             main()
+            time.sleep(WAIT_SECONDS)
 
-        except Exception:
+        except Exception as e:
+            print(e)
             sys.exit('Something broke, restart application')
         
-        time.sleep(WAIT_SECONDS)
+        
