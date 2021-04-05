@@ -69,3 +69,7 @@ If you want to contact me you can reach me at [medel.victor@gmail.com](mailto:me
 ## License
 
 This project uses the following license: [MIT License](LICENSE).
+
+## Future Work
+
+Adding further capability and instructions on how to deploy to Amazon AWS
