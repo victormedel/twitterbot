@@ -158,7 +158,6 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
         print(e)
 
     os.remove(file_name)
-    
 
 
 def main():
