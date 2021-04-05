@@ -38,7 +38,7 @@ To use the Random Location TwitterBot, localy, follow these steps:
 1. From the project directory run random_loc.py
 
 ```
-C:\twitter-bot>python random_loc.py
+C:\twitter-bot\bot>python random_loc.py
 ```
 
 2. Ctrl+C to stop the bot

@@ -94,7 +94,13 @@ def get_loc(w_api, words):
 
 
 def map_generator(g_api, latitude, longitude):
-    # get image map of coordinates - should be a function
+    # datetime object containing current date and time to be used in filename
+    now = datetime.now()
+
+    # format date and time string to mmddYY_HMS
+    date_time_str = now.strftime("%m%d%Y_%H%M%S")
+
+    # get image map of coordinates
     logger.info('Retrieving map image')
     center = latitude + ',' + longitude
     zoom = 16
@@ -107,7 +113,7 @@ def map_generator(g_api, latitude, longitude):
 
     # Store image file to be used for post
     logger.info('Storing map image to used for Twitter post')
-    file_name = 'map_img.png'
+    file_name = 'map_img_' + date_time_str +'.png'
     f = open(file_name, 'wb') 
     f.write(req.content) 
     f.close()
@@ -150,6 +156,8 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
 
     except tweepy.TweepError as e:
         print(e)
+
+    os.remove(file_name)
     
 
 
