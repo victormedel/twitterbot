@@ -35,7 +35,7 @@ C:\twitter-bot>pip install -r requirements.txt
 
 To use the Random Location TwitterBot, localy, follow these steps:
 
-1. Configure location and wait time in random_loc.py
+1. Configure location and wait time in random_loc.py (optional)
 
 ```python
 WAIT_SECONDS = 1800
