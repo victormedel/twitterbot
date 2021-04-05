@@ -31,7 +31,7 @@ To install the Random Location TwitterBot *locally*, follow these steps:
 C:\twitter-bot>pip install -r requirements.txt
 ```
 
-## Using Random Location TwitterBot
+## Using The Random Location TwitterBot
 
 To use the Random Location TwitterBot, localy, follow these steps:
 
