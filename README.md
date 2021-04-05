@@ -1,35 +1,48 @@
 # Random Location TwitterBot
 
-<!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
 ![GitHub repo size](https://img.shields.io/github/repo-size/victormedel/twitterbot)
 ![GitHub contributors](https://img.shields.io/github/contributors/victormedel/twitterbot)
 ![GitHub stars](https://img.shields.io/github/stars/victormedel/twitterbot?style=social)
 
-The Random Location TwitterBot parses all Twitter trending words and attempts to generate a geo location via [what3words.com](https://what3words.com) twice a day.
+The Random Location TwitterBot parses all Twitter trending words and attempts to generate a geo location via [what3words.com](https://what3words.com).
 
-This is a simple converation starter application that will allow Twitter users to reach a different audience
+This is a simple converation starter application that will allow Twitter users to potentially reach a different audience
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-<!--- These are just example requirements. Add, duplicate or remove as required --->
-* Obtained [Twitter Developer](https://developer.twitter.com/) API keys and tokens
-* Obtained a [what3words](https://developer.what3words.com/) API key
-* Obatined a [Google Cloud](https://cloud.google.com/apis) API key for Google Map Static API
-* Generate config.yml file
 
-## Installing Random Location TwitterBot
+* Python 3.8+
+* [Twitter Developer](https://developer.twitter.com/) API keys and tokens
+* [what3words](https://developer.what3words.com/) API key
+* [Google Cloud](https://cloud.google.com/apis) API key for Google Map Static API
 
-To install the Random Location TwitterBot, follow these steps:
+## Installing The Random Location TwitterBot
 
+To install the Random Location TwitterBot *locally*, follow these steps:
+
+1. Configure all API keys and tokens as environment system variables using variable names found in config.py
+
+2. Clone project locally
+
+3. Install required Python packages
+
+```
+C:\twitter-bot>pip install -r requirements.txt
+```
 
 ## Using Random Location TwitterBot
 
-To use Random Location TwitterBot, follow these steps:
+To use the Random Location TwitterBot, localy, follow these steps:
+
+1. From the project directory run random_loc.py
 
 ```
-C:\>python main.py
+C:\twitter-bot>python random_loc.py
 ```
+
+2. Ctrl+C to stop the bot
+
 
 ## Built With
 
@@ -38,7 +51,7 @@ C:\>python main.py
 * [geocoder](https://github.com/DenisCarriere/geocoder)
 
 ## Contributing to TwitterBot
-<!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
+
 To contribute to TwitterBot, follow these steps:
 
 1. Fork this repository.
@@ -54,6 +67,5 @@ Alternatively see the GitHub documentation on [creating a pull request](https://
 If you want to contact me you can reach me at [medel.victor@gmail.com](mailto:medel.victor@gmail.com).
 
 ## License
-<!--- If you're not sure which open license to use see https://choosealicense.com/--->
 
 This project uses the following license: [MIT License](LICENSE).

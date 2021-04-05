@@ -68,15 +68,16 @@ def get_loc(w_api, words):
 
     # Get values from item in set ranked #1
     logger.info('Extracting information from What3Words object')
-    country_abv = result['suggestions'][0]['country']
-    nearest_loc = result['suggestions'][0]['nearestPlace']
     sugg_words = result['suggestions'][0]['words']
 
     # Get latitude and longitude for suggested words
-    logger.info('Getting latitude and longitude for the three words suggested')
+    logger.info('Getting location information based on lat-long')
     coord = geocoder.convert_to_coordinates(sugg_words)
     latitude = str(coord['coordinates']['lat'])
     longitude = str(coord['coordinates']['lng'])
+    country_abv = coord['country']
+    nearest_loc = coord['nearestPlace']
+    sugg_words_final = coord['words']
 
     logger.info('Converting country abbreviation to full country name')
     country = pycountry.countries.get(alpha_2=country_abv)
@@ -89,7 +90,7 @@ def get_loc(w_api, words):
         main()
 
     else:
-        return sugg_words, nearest_loc , country.name, latitude, longitude
+        return sugg_words_final, nearest_loc , country.name, latitude, longitude
 
 
 def map_generator(g_api, latitude, longitude):
@@ -132,14 +133,14 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     
     # Post Text
     logger.info('Generating text for post')
-    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are: ' + \
+    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are: \n' + \
                 trd_words + '\n\n' + \
-                emoji.emojize(':gear:') +' Changing them to ///' + sugg_words + ' @what3words will point to a location near ' + \
+                emoji.emojize(':gear:') +' Changing them to ///' + sugg_words + ' @what3words will point to a location near: \n' + \
                 emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
                 emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
                 '#what3words'
 
-    logger.info('Post to Twitter')
+    # logger.info('Post to Twitter')
     try:
         # Upload Image
         media = t_api.media_upload(file_name)
@@ -150,8 +151,6 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     except tweepy.TweepError as e:
         print(e)
     
-    logger.info('Clean Up: Removing generated image')
-    os.remove(file_name)
 
 
 def main():
@@ -172,16 +171,10 @@ def main():
     now = datetime.now()
     dt_str = now.strftime("%m/%d/%Y %H:%M:%S")
     logger.info('Tweet posted on: ' + str(dt_str))
+    logger.info('...wainting before for posting again')
+    time.sleep(WAIT_SECONDS)
 
 
 if __name__ == "__main__":
     while True:
-        try:
-            main()
-            time.sleep(WAIT_SECONDS)
-
-        except Exception as e:
-            print(e)
-            sys.exit('Something broke, restart application')
-        
-        
+        main()
