@@ -79,4 +79,5 @@ This project uses the following license: [MIT License](LICENSE).
 
 ## Future Work
 
-Adding further capability and instructions on how to deploy to Amazon AWS
+* Adding further capability and instructions on how to deploy to Amazon AWS
+* Autoreply and like functionality

@@ -127,6 +127,7 @@ def map_generator(g_api, latitude, longitude):
 
     if file_size < 100:
         logger.info('Potential low quality map image, restarting process')
+        os.remove(file_name)
         time.sleep(120) # sleep for 2 minutes before attempting again
         main()
 
@@ -146,16 +147,23 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
                 emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
                 '#what3words'
 
-    # logger.info('Post to Twitter')
+    logger.info('Preparing image for upload')
     try:
-        # Upload Image
+        # Prepare Image for Upload
         media = t_api.media_upload(file_name)
 
+    except tweepy.TweepError as e:
+        print(e.api_code)
+        print(getExceptionMessage(e.reason))
+
+    logger.info('Post to Twitter')
+    try:
         # Post Tweet
         t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
 
     except tweepy.TweepError as e:
-        print(e)
+        print(e.api_code)
+        print(getExceptionMessage(e.reason))
 
     os.remove(file_name)
 
