@@ -21,6 +21,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 WAIT_SECONDS = 1800
+RESTART_WAIT = 120
 LOCATION = "United States"
 
 
@@ -84,9 +85,10 @@ def get_loc(w_api, words):
 
     logger.info('Returning location data')
 
-    if nearest_loc == '':
-        logger.info('Nearest location blank, restarting process')
-        time.sleep(120) # sleep for 2 minutes before attempting again
+
+    if any(x is None for x in [sugg_words_final, nearest_loc , country.name, latitude, longitude]) or nearest_loc == '':
+        logger.info('None type variable detected, restarting process in two minutes')
+        time.sleep(RESTART_WAIT) # sleep for 2 minutes before attempting again
         main()
 
     else:
@@ -128,7 +130,7 @@ def map_generator(g_api, latitude, longitude):
     if file_size < 100:
         logger.info('Potential low quality map image, restarting process')
         os.remove(file_name)
-        time.sleep(120) # sleep for 2 minutes before attempting again
+        time.sleep(RESTART_WAIT) # sleep for 2 minutes before attempting again
         main()
 
     else:
@@ -147,24 +149,20 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
                 emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
                 '#what3words'
 
-    logger.info('Preparing image for upload')
     try:
-        # Prepare Image for Upload
+        logger.info('Prepare Image for Upload')
         media = t_api.media_upload(file_name)
 
-    except tweepy.TweepError as e:
-        print(e.api_code)
-        print(getExceptionMessage(e.reason))
-
-    logger.info('Post to Twitter')
-    try:
-        # Post Tweet
+        logger.info('Post to Twitter')
         t_api.update_status(status=status, media_ids=[media.media_id], lat=latitude, long=longitude)
 
     except tweepy.TweepError as e:
         print(e.api_code)
         print(getExceptionMessage(e.reason))
+        time.sleep(RESTART_WAIT)
+        main()
 
+    logger.info('Removing image')
     os.remove(file_name)
 
 
