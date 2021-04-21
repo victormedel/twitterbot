@@ -86,13 +86,14 @@ def get_loc(w_api, words):
     logger.info('Returning location data')
 
 
-    if any(x is None for x in [sugg_words_final, nearest_loc , country.name, latitude, longitude]) or nearest_loc == '':
-        logger.info('None type variable detected, restarting process in two minutes')
+    if any(elem is None for elem in [sugg_words_final, nearest_loc, country.name, latitude, longitude]) or nearest_loc == '':
+        logger.info('None type or empty variable detected, restarting process in two minutes')
         time.sleep(RESTART_WAIT) # sleep for 2 minutes before attempting again
         main()
 
     else:
-        return sugg_words_final, nearest_loc , country.name, latitude, longitude
+        print('>>>>', sugg_words_final, ',', nearest_loc, ',', country.name, ',', latitude, ',', longitude, '<<<<')
+        return sugg_words_final, nearest_loc, country.name, latitude, longitude
 
 
 def map_generator(g_api, latitude, longitude):
@@ -142,12 +143,10 @@ def twitter_post(t_api, file_name, trd_words, sugg_words, nearest_loc , country,
     
     # Post Text
     logger.info('Generating text for post')
-    status =  emoji.emojize(':fire:') + ' 3 random words from trending topics in the US are: \n' + \
-                trd_words + '\n\n' + \
-                emoji.emojize(':gear:') +' Changing them to ///' + sugg_words + ' @what3words will point to a location near: \n' + \
-                emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
-                emoji.emojize(':world_map:') + ' What\'s your 3 word location? \n\n' + \
-                '#what3words'
+    status = emoji.emojize(':compass:') + ' @what3words address ///' + sugg_words + ' can be found near: \n' + \
+             emoji.emojize(':round_pushpin:') + nearest_loc + ' (' + country + ')' + '\n\n' + \
+             emoji.emojize(':world_map:') + ' What\'s your 3 word address? \n\n' + \
+             '#what3words'
 
     try:
         logger.info('Prepare Image for Upload')

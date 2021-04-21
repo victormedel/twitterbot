@@ -4,9 +4,9 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/victormedel/twitterbot)
 ![GitHub stars](https://img.shields.io/github/stars/victormedel/twitterbot?style=social)
 
-The Random Location TwitterBot parses all Twitter trending words and attempts to generate a geo location via [what3words.com](https://what3words.com).
+The Random Location TwitterBot parses all Twitter trending words and attempts to generate a three word geo location address via the [what3words API](https://what3words.com) by randomly selecting the parsed words.
 
-This is a simple converation starter application that will allow Twitter users to potentially reach a different audience
+This is a simple converation starter application that will allow Twitter users to potentially reach a different audience.
 
 ## Prerequisites
 
